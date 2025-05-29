@@ -1,8 +1,12 @@
 # Smart City Real-Time Streaming & Analytics Pipeline
 
-> **End-to-end demonstration** of a real-time data pipeline simulating, processing, and querying smart city telemetry: **Kafka → Spark → S3 → Glue Crawler → Data Catalog → Athena → Glue Job → Redshift**.
+> End-to-end demonstration of a real-time data pipeline simulating, processing, and querying smart city telemetry: 
 
-![Architecture Diagram](diagrams/architecture.png)
+Kafka → Spark → S3 → Glue Crawler → Data Catalog → Athena
+                                         |
+                                         |
+                                         v
+                                     Glue Job → Redshift.
 
 ---
 
