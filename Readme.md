@@ -43,7 +43,7 @@ This project demonstrates:
 
 ## Architecture
 
-<img src="images/Data Flow.png" alt="Architecture Diagram" width="600"/>
+<img src="images/Data Flow.png" alt="Architecture Diagram" width="700"/>
 
 
 
