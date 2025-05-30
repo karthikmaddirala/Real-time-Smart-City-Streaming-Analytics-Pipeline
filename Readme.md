@@ -43,6 +43,10 @@ This project demonstrates:
 
 ## Architecture
 
+![Architecture Diagram](images/Data Flow.png)
+
+
+
 ```mermaid
 flowchart TD
   A[Data Simulator] --> B[Kafka Topics<br/>(vehicle, gps, weather, traffic, emergency)]
