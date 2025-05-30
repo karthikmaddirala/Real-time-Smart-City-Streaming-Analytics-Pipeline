@@ -43,11 +43,11 @@ This project demonstrates:
 
 ## Architecture
 
-![Architecture Diagram](images/Data Flow.png)
+<img src="images/Data Flow.png" alt="Architecture Diagram" width="600"/>
 
 
 
-```mermaid
+```
 flowchart TD
   A[Data Simulator] --> B[Kafka Topics<br/>(vehicle, gps, weather, traffic, emergency)]
   B --> C[Spark Structured Streaming<br/>(2×workers, schemas, watermarks, cleaning, joins)]
