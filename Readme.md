@@ -2,11 +2,6 @@
 
 > *End-to-end demonstration of a real-time data pipeline simulating, processing, and querying smart city telemetry:* 
 
-Kafka → Spark → S3 → Glue Crawler → Data Catalog → Athena
-                                         |
-                                         |
-                                         v
-                                     Glue Job → Redshift.
 
 ---
 
@@ -15,7 +10,6 @@ Kafka → Spark → S3 → Glue Crawler → Data Catalog → Athena
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
@@ -45,18 +39,9 @@ This project demonstrates:
 
 <img src="images/Data Flow.png" alt="Architecture Diagram" width="700"/>
 
+Data flows through the pipeline in a continuous loop: first, IoT devices send streams of vehicle telemetry, GPS coordinates, weather updates, traffic snapshots, and emergency alerts, each published to its own Kafka topic. Spark Structured Streaming then subscribes to all five topics, applying predefined schemas, cleaning and splitting location fields into latitude and longitude, and using watermarks and timestamp‐based window joins to enrich vehicle records with the latest weather and emergency data. Both the raw individual streams and the joined “enriched” stream are written in Parquet format to Amazon S3. As soon as new Parquet files land, an S3 event triggers an AWS Glue Job that reads the enriched data—using schema definitions from the AWS Glue Data Catalog—to load it into Redshift. Meanwhile, AWS Glue Crawlers periodically scan the S3 folders, infer and register table schemas in the Data Catalog, and Athena uses that metadata to run ad-hoc SQL queries directly against the Parquet files in S3.
 
 
-```
-flowchart TD
-  A[Data Simulator] --> B[Kafka Topics<br/>(vehicle, gps, weather, traffic, emergency)]
-  B --> C[Spark Structured Streaming<br/>(2×workers, schemas, watermarks, cleaning, joins)]
-  C --> D[S3 (raw & enriched)]
-  D -->|S3 Event| E[AWS Glue Job<br/>(event-driven load)]
-  E --> F[Amazon Redshift]
-  D --> G[AWS Glue Crawler<br/>& Data Catalog]
-  G --> H[Amazon Athena<br/>(ad-hoc SQL)]
-```
 
 ---
 
@@ -73,7 +58,7 @@ flowchart TD
 | Amazon Athena             | Serverless SQL querying over S3 data                              |
 | AWS Glue Job              | Event-driven ETL reading from Data Catalog → loading into Redshift|
 | Amazon Redshift           | Dedicated analytic data warehouse                                 |
-
+ 
 ---
 
 ## Prerequisites
@@ -90,8 +75,8 @@ flowchart TD
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/smart-city-pipeline.git
-   cd smart-city-pipeline
+   git clone https://github.com/your-username/Real-time-Smart-City-Streaming-Analytics-Pipeline.git
+   cd Real-time-Smart-City-Streaming-Analytics-Pipeline
    ```
 2. **Set up your virtual environment** (optional but recommended):
    ```bash
@@ -111,29 +96,27 @@ flowchart TD
 ## Project Structure
 
 ```
-smart-city-pipeline/
+Real-time-Smart-City-Streaming-Analytics-Pipeline/
 ├── README.md
 ├── .gitignore
+├── Project Documentation.pdf 
 ├── docker-compose.yml
-├── config.py              # AWS credentials (ignored)
-├── requirements.txt       # Python dependencies
-├── data-simulator/        # Kafka producers for each topic
-│   └── simulator.py
-├── spark/                 # Spark Structured Streaming job
-│   └── main.py
+├── jobs/
+│   ├── config.py          # AWS credentials (ignored)
+│   ├── main.py
+│   └── spark-city.py              
 ├── glue/                  # Glue crawler configs & ETL job script
 │   ├── crawler_config.json
 │   └── etl_job_script.py
-├── diagrams/              # Flowchart source + export
-│   ├── architecture.mmd
-│   └── architecture.png
-└── assets/                # Logos and screenshots
-    ├── kafka.png
-    ├── spark.png
-    ├── s3.png
-    ├── glue.png
-    ├── athena.png
-    └── redshift.png
+└── images/                # Logos and screenshots
+    ├── Data Flow.png
+    ├── Athena_results.png
+    ├── Crrawler Logs.png
+    ├── Glue Job.png
+    ├── S3.png
+    ├── Spark Logs.png
+    ├── kafka log.png
+    └── redshift_results.png
 ```
 
 ---
@@ -172,7 +155,6 @@ smart-city-pipeline/
 
 - **Real-time dashboard** with QuickSight or Streamlit
 - **CloudWatch metrics & Alerts** for pipeline health monitoring
-- **Schema Registry** using AWS Glue Schema Registry (Avro/Protobuf)
 - **Data quality checks** and anomaly detection integrations
 
 ---
