@@ -22,7 +22,11 @@
 
 ## Overview
 
+In modern urban environments, real-time decision-making based on high-velocity data is essential for efficient traffic management, emergency response, and public safety. However, most traditional data systems are batch-oriented and fail to support timely insights. This project addresses that gap by building a scalable, real-time streaming architecture that can ingest, process, enrich, and analyze smart city data from various IoT sources. The goal is to enable immediate insights, improve situational awareness, and provide a foundation for intelligent city-wide automation and analytics.
+
 The **Smart City Real-Time Streaming & Analytics Pipeline** ingests real-time smart city IoT data (vehicle telemetry, GPS, weather, traffic, emergency events) through Apache Kafka, processes and enriches it using Spark Structured Streaming, stores both raw and enriched data in Amazon S3, catalogs the schema using AWS Glue Crawlers and the Data Catalog, enables ad-hoc SQL querying via Amazon Athena, and loads analytics-ready datasets into Amazon Redshift for business intelligence and reporting.
+
+
 
 This project demonstrates:
 
